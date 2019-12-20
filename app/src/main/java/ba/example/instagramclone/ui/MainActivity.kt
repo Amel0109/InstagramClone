@@ -1,19 +1,19 @@
-package ba.example.instagramclone
+package ba.example.instagramclone.ui
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import ba.example.instagramclone.ui.MainPagerAdapter
-import ba.example.instagramclone.ui.profile.AddFragment
-import ba.example.instagramclone.ui.profile.HomeFragment
+import ba.example.instagramclone.R
+import ba.example.instagramclone.ui.login.LoginActivity
+import ba.example.instagramclone.ui.add.AddFragment
+import ba.example.instagramclone.ui.home.HomeFragment
 import ba.example.instagramclone.ui.profile.ProfileFragment
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private  lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +44,15 @@ class MainActivity : AppCompatActivity() {
                 else ->{
                     return@setOnNavigationItemSelectedListener true
                 }
+            }
+        }
+        auth = FirebaseAuth.getInstance()
+
+        auth.addAuthStateListener{
+            if (it.currentUser == null){
+                val user = auth.currentUser
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
         }
     }
